@@ -1,0 +1,14 @@
+{
+  "name": "HangmanServer",
+  "version": "0.0.1",
+  "repository" : {
+    "type" : "git",
+    "url" : "http://github.com/mhoc/hangman-server"
+  },
+  "dependencies": {
+    "async": "*",
+    "express": "3.3.x",
+    "log4js": "^0.6.21",
+    "q": "*"
+  }
+}
