@@ -13,7 +13,7 @@ module.exports = function(req, res) {
   // Parse out the options provided by the client
   var code = req.param('code')
   var token = req.param('token')
-  var guess = req.param('guess')
+  var guess = req.param('guess').toUpperCase()
 
   // Return a 400 if no code is provided
   if (!code) {
