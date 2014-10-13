@@ -15,7 +15,7 @@ var envvar = process.env.REDISCLOUD_URL
 if (envvar) {
   var parsed = url.parse(envvar)
   client = redis.createClient(parsed.port, parsed.hostname, {no_ready_check: true})
-  client.auth(redis_url.auth.split(":")[1]);
+  client.auth(parsed.auth.split(":")[1]);
 } else {
   client = redis.createClient(6379, 'localhost')
 }
