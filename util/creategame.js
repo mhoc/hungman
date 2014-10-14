@@ -3,7 +3,7 @@
  * middlewar which handles everything related to creating a new game
  */
 
-var setgame = require('../redis/setgame')
+var redis = require('../db/games')
 var uuid = require('node-uuid')
 var wordlist = require('./wordlist')
 
@@ -27,7 +27,6 @@ module.exports = function() {
 
   // Create a game object
   var game = {
-    'status': 'ALIVE',
     'token': token,
     'word': word,
     'state': state,
@@ -35,7 +34,7 @@ module.exports = function() {
   }
 
   // Set the game's information in redis
-  setgame(game)
+  redis.createGame(game)
 
   return game
 
