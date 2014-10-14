@@ -13,7 +13,7 @@ module.exports = function(req, res) {
   // Parse out the options provided by the client
   var code = req.param('code')
   var token = req.param('token')
-  var guess = req.param('guess').toUpperCase()
+  var guess = req.param('guess')
 
   // Return a 400 if no code is provided
   if (!code) {
@@ -29,7 +29,7 @@ module.exports = function(req, res) {
 
   // If both a token and guess are provided then they are placing a guess
   if (token && guess) {
-    placeGuess(res, token, guess)
+    placeGuess(res, token.toUpperCase(), guess)
     return
   }
 
