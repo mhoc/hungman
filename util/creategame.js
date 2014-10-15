@@ -10,7 +10,7 @@ var wordlist = require('./wordlist')
 module.exports = function() {
 
   // Create a token for this game
-  var token = uuid.v4()
+  var token = uuid.v4().toUpperCase().substring(0,7)
 
   // Get a word for the game
   var word = wordlist.getWord()

@@ -5,6 +5,7 @@
  */
 
 // Setup redis
+var logger = require('log4js').getLogger()
 var redis = require('redis')
 var url = require('url')
 
@@ -13,10 +14,12 @@ var client = null
 var envvar = process.env.REDISCLOUD_URL
 
 if (envvar) {
+  logger.info("Setting up redis client using envvar " + envvar)
   var parsed = url.parse(envvar)
   client = redis.createClient(parsed.port, parsed.hostname, {no_ready_check: true})
-  client.auth(parsed.auth.split(":")[1]);
+  client.auth(parsed.auth.split(":")[1])
 } else {
+  logger.info("Setting up redis client using localhost")
   client = redis.createClient(6379, 'localhost')
 }
 
@@ -32,6 +35,7 @@ var timeout = 60*60*2
  *  This is really such a weird use of redis but i figure its fast and i dont need
  *  really persistant data so it should work */
 exports.createGame = function(game) {
+  logger.info("Setting game " + game.token + " into redis")
 
   // Create our promise we return
   // This promise is only used for error checking since, right now, this function is implemented synchronously
@@ -41,7 +45,12 @@ exports.createGame = function(game) {
   var token = game.token
   client.set(wordkey(token), game.word)
   client.set(statekey(token), game.state)
-  client.set(remainkey(token), game.remaining)
+  client.set(remainkey(token), game.remaining, function(err, result) {
+    if (err) {
+      logger.error("Error setting key in redis")
+      logger.error(err)
+    }
+  })
 
   // Set timeouts
   client.expire(wordkey(token), timeout)
@@ -54,6 +63,7 @@ exports.createGame = function(game) {
 }
 
 exports.getGame = function(token) {
+  logger.info("Retrieving game " + token + " from redis")
 
   // Query redis for every key in the game
 
@@ -65,6 +75,10 @@ exports.getGame = function(token) {
       function(callback) {
         client.get(wordkey(token), function(err, result) {
           game.word = result
+          if (err) {
+            logger.error("Error retrieving game from redis")
+            logger.error(err)
+          }
           callback(err, result)
         })
       },
