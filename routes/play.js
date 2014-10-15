@@ -29,7 +29,7 @@ module.exports = function(req, res) {
 
   // If both a token and guess are provided then they are placing a guess
   if (token && guess) {
-    placeGuess(res, token.toUpperCase(), guess)
+    placeGuess(res, token.toUpperCase(), guess.toUpperCase())
     return
   }
 
